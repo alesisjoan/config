@@ -1,7 +1,9 @@
 alias c="clear"
 alias stesting="ssh desahe@hcudtesting"
-alias skroonos="ssh desarrollo@kronos"
+alias skronos="ssh desarrollo@kronos"
 alias sodoo="ssh desarrollo@odooclinica"
-alias scaea="ssh developer@production"
+alias scaea="ssh developer@caea"
 alias cd..='cd ..'
 alias cd~='cd ~'
+alias rodoo='sudo service odoo restart'
+alias todoo='sh tail.sh'
