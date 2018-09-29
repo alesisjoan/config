@@ -1,0 +1,50 @@
+upstream odoo8 {
+server 127.0.0.1:8069 weight=1 fail_timeout=0;
+}
+
+upstream odoo8-im {
+server 127.0.0.1:8072 weight=1 fail_timeout=0;
+}
+
+## http redirects to https ##
+server {
+listen 80 default_server;
+server_name _;
+
+
+# Specifies the maximum accepted body size of a client request,
+# as indicated by the request header Content-Length.
+client_max_body_size 200m;
+
+# add ssl specific settings
+keepalive_timeout 60;
+ssl off;
+ssl_certificate /etc/ssl/nginx/server.crt;
+ssl_certificate_key /etc/ssl/nginx/server.key;
+
+# limit ciphers
+# set headers
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+
+proxy_redirect off;
+proxy_buffering off;
+
+location / {
+proxy_pass http://odoo8;
+}
+
+location /longpolling {
+proxy_pass http://odoo8-im;
+}
+
+location /web/static/ {
+proxy_cache_valid 200 60m;
+proxy_buffering on;
+expires 864000;
+proxy_pass http://odoo8;
+}
+
+
+}
